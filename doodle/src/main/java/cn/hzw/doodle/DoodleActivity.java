@@ -238,11 +238,11 @@ public class DoodleActivity extends Activity {
                 if (size <= 0) {
                     size = mDoodleParams.mPaintPixelSize > 0 ? mDoodleParams.mPaintPixelSize : mDoodle.getSize();
                 }
-                // 设置初始值
+                // Set initial value
                 mDoodle.setSize(size);
                 // 选择画笔
                 mDoodle.setPen(DoodlePen.BRUSH);
-                mDoodle.setShape(DoodleShape.HAND_WRITE);
+                mDoodle.setShape(DoodleShape.FILL_RECT);
                 mDoodle.setColor(new DoodleColor(mDoodleParams.mPaintColor));
                 if (mDoodleParams.mZoomerScale <= 0) {
                     findViewById(R.id.btn_zoomer).setVisibility(View.GONE);
@@ -257,7 +257,15 @@ public class DoodleActivity extends Activity {
                 mPenSizeMap.put(DoodlePen.ERASER, mDoodle.getSize());
                 mPenSizeMap.put(DoodlePen.TEXT, DEFAULT_TEXT_SIZE * mDoodle.getUnitSize());
                 mPenSizeMap.put(DoodlePen.BITMAP, DEFAULT_BITMAP_SIZE * mDoodle.getUnitSize());
-            }
+
+                DoodlePath path = DoodlePath.toShape(mDoodle, mDoodleView.toX(0), mDoodleView.toY(0), mDoodleView.toX(mDoodleView.getWidth()), mDoodleView.toY(mDoodleView.getHeight()));
+                mDoodleView.addItem(path);
+                mDoodleView.refresh();
+
+                mDoodle.setPen(DoodlePen.ERASER);
+                mDoodle.setShape(DoodleShape.HAND_WRITE);
+
+        }
         }, null);
 
         mTouchGestureListener = new DoodleOnTouchGestureListener(mDoodleView, new DoodleOnTouchGestureListener.ISelectionListener() {

@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
                 // 初始画笔大小
                 params.mPaintUnitSize = DoodleView.DEFAULT_SIZE;
                 // 画笔颜色
-                params.mPaintColor = Color.argb(128, 0, 255, 0);
+                params.mPaintColor = Color.argb(128, 0, 0, 0);
                 // 是否支持缩放item
                 params.mSupportScaleItem = true;
                 // 启动涂鸦页面
