@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -38,6 +41,7 @@ import cn.forward.androids.utils.StatusBarUtil;
 import cn.forward.androids.utils.Util;
 import cn.hzw.doodle.core.IDoodle;
 import cn.hzw.doodle.core.IDoodleColor;
+import cn.hzw.doodle.core.IDoodleItem;
 import cn.hzw.doodle.core.IDoodleItemListener;
 import cn.hzw.doodle.core.IDoodlePen;
 import cn.hzw.doodle.core.IDoodleSelectableItem;
@@ -204,10 +208,75 @@ public class DoodleActivity extends Activity {
                 }
                 doodleFile.mkdirs();
 
+
+                List<IDoodleItem> items = mDoodleView.getAllItem();
+                if (items.size() < 2) {
+                    return;
+                }
+
+                DoodlePath item = (DoodlePath)items.get(1);
+                RectF rect = item.mBound;
+                rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
+                int bitmapWidth = mDoodle.getBitmap().getWidth();
+                int bitmapHeight = mDoodle.getBitmap().getHeight();
+                float norX = rect.left / bitmapWidth;
+                float norY = rect.top / bitmapHeight;
+                float norRight = norX + rect.width() / bitmapWidth;
+                float norBottom = norY + rect.height() / bitmapHeight;
+
+                if (norX < 0) {
+                    norX = 0;
+                }
+                else if (norX > 1) {
+                    norX = 1;
+                }
+
+                if (norY < 0) {
+                    norY = 0;
+                }
+                else if (norX > 1) {
+                    norY = 1;
+                }
+
+                if (norRight < 0) {
+                    norRight = 0;
+                }
+                else if (norRight > 1) {
+                    norRight = 1;
+                }
+
+                if (norBottom < 0) {
+                    norBottom = 0;
+                }
+                else if (norBottom > 1) {
+                    norBottom = 1;
+                }
+
+                if (norX == norRight) {
+                    return;
+                }
+                if (norY == norBottom) {
+                    return;
+                }
+
+                float norWidth = norRight - norX;
+                float norHeight = norBottom - norY;
+
+
+                BitmapFactory.Options options = null;
+                options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(mDoodleParams.mImagePath, options);
+                int width = options.outWidth;
+                int height = options.outHeight;
+                Bitmap bmp = ImageUtils.createBitmapFromPath(mDoodleParams.mImagePath, width, height);
+                Bitmap cropped = Bitmap.createBitmap(bmp, (int)(bmp.getWidth() * norX), (int)(bmp.getHeight() * norY), (int)(bmp.getWidth() * norWidth), (int)(bmp.getHeight() * norHeight));
+                bmp = null;
+
                 FileOutputStream outputStream = null;
                 try {
                     outputStream = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 95, outputStream);
+                    cropped.compress(Bitmap.CompressFormat.JPEG, 95, outputStream);
                     ImageUtils.addImage(getContentResolver(), file.getAbsolutePath());
                     Intent intent = new Intent();
                     intent.putExtra(KEY_IMAGE_PATH, file.getAbsolutePath());
@@ -217,6 +286,7 @@ public class DoodleActivity extends Activity {
                     e.printStackTrace();
                     onError(DoodleView.ERROR_SAVE, e.getMessage());
                 } finally {
+                    cropped = null;
                     Util.closeQuietly(outputStream);
                 }
             }
