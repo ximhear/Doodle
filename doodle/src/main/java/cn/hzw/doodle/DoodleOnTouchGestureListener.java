@@ -183,6 +183,12 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
                 rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
                 path.addRect(rect, Path.Direction.CW);
                 DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
+                int bitmapWidth = mDoodle.getBitmap().getWidth();
+                int bitmapHeight = mDoodle.getBitmap().getHeight();
+                float norX = rect.left / bitmapWidth;
+                float norY = rect.top / bitmapHeight;
+                float norWidth = rect.width() / bitmapWidth;
+                float norHeight = rect.height() / bitmapHeight;
                 mDoodle.addItem(doodlePath);
                 mCurrDoodlePath = null;
             }

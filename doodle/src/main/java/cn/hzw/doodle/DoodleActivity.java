@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -127,11 +128,6 @@ public class DoodleActivity extends Activity {
     private AlphaAnimation mViewShowAnimation, mViewHideAnimation; // view隐藏和显示时用到的渐变动画
 
     private DoodleParams mDoodleParams;
-
-    // 触摸屏幕超过一定时间才判断为需要隐藏设置面板
-    private Runnable mHideDelayRunnable;
-    // 触摸屏幕超过一定时间才判断为需要显示设置面板
-    private Runnable mShowDelayRunnable;
 
     private DoodleOnTouchGestureListener mTouchGestureListener;
     private Map<IDoodlePen, Float> mPenSizeMap = new HashMap<>(); //保存每个画笔对应的最新大小
@@ -258,6 +254,10 @@ public class DoodleActivity extends Activity {
                 mPenSizeMap.put(DoodlePen.TEXT, DEFAULT_TEXT_SIZE * mDoodle.getUnitSize());
                 mPenSizeMap.put(DoodlePen.BITMAP, DEFAULT_BITMAP_SIZE * mDoodle.getUnitSize());
 
+                Log.i("doodle", "" + mDoodleView.getWidth());
+                Log.i("doodle", "" + mDoodleView.getHeight());
+                Log.i("doodle", "" + mDoodleView.toX(mDoodleView.getWidth()));
+                Log.i("doodle", "" + mDoodleView.toY(mDoodleView.getHeight()));
                 DoodlePath path = DoodlePath.toShape(mDoodle, mDoodleView.toX(0), mDoodleView.toY(0), mDoodleView.toX(mDoodleView.getWidth()), mDoodleView.toY(mDoodleView.getHeight()));
                 mDoodleView.addItem(path);
                 mDoodleView.refresh();
@@ -391,7 +391,6 @@ public class DoodleActivity extends Activity {
             }
         }, null);
         if (doodleText == null) {
-            mSettingsPanel.removeCallbacks(mHideDelayRunnable);
         }
     }
 
@@ -455,6 +454,7 @@ public class DoodleActivity extends Activity {
         });
 
         mSettingsPanel = findViewById(R.id.doodle_panel);
+        hideView(mSettingsPanel);
 
         mBtnHidePanel = findViewById(R.id.doodle_btn_hide_panel);
 
@@ -502,17 +502,9 @@ public class DoodleActivity extends Activity {
                         && mDoodleParams.mChangePanelVisibilityDelay > 0) {
                     switch (event.getAction() & MotionEvent.ACTION_MASK) {
                         case MotionEvent.ACTION_DOWN:
-                            mSettingsPanel.removeCallbacks(mHideDelayRunnable);
-                            mSettingsPanel.removeCallbacks(mShowDelayRunnable);
-                            //触摸屏幕超过一定时间才判断为需要隐藏设置面板
-                            mSettingsPanel.postDelayed(mHideDelayRunnable, mDoodleParams.mChangePanelVisibilityDelay);
                             break;
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
-                            mSettingsPanel.removeCallbacks(mHideDelayRunnable);
-                            mSettingsPanel.removeCallbacks(mShowDelayRunnable);
-                            //离开屏幕超过一定时间才判断为需要显示设置面板
-                            mSettingsPanel.postDelayed(mShowDelayRunnable, mDoodleParams.mChangePanelVisibilityDelay);
                             break;
                     }
                 }
@@ -544,17 +536,6 @@ public class DoodleActivity extends Activity {
         mViewShowAnimation.setDuration(150);
         mViewHideAnimation = new AlphaAnimation(1, 0);
         mViewHideAnimation.setDuration(150);
-        mHideDelayRunnable = new Runnable() {
-            public void run() {
-                hideView(mSettingsPanel);
-            }
-
-        };
-        mShowDelayRunnable = new Runnable() {
-            public void run() {
-                showView(mSettingsPanel);
-            }
-        };
     }
 
     private ValueAnimator mRotateAnimator;
@@ -611,14 +592,7 @@ public class DoodleActivity extends Activity {
                         }, themeId).show(mDoodleView, mBtnColor.getBackground(), Math.min(mDoodleView.getWidth(), mDoodleView.getHeight()));
             }
         } else if (v.getId() == R.id.doodle_btn_hide_panel) {
-            mSettingsPanel.removeCallbacks(mHideDelayRunnable);
-            mSettingsPanel.removeCallbacks(mShowDelayRunnable);
             v.setSelected(!v.isSelected());
-            if (!mBtnHidePanel.isSelected()) {
-                showView(mSettingsPanel);
-            } else {
-                hideView(mSettingsPanel);
-            }
         } else if (v.getId() == R.id.doodle_btn_finish) {
             mDoodle.save();
         } else if (v.getId() == R.id.doodle_btn_back) {
@@ -743,22 +717,12 @@ public class DoodleActivity extends Activity {
         findViewById(R.id.doodle_btn_back).performClick();
     }
 
-    private void showView(View view) {
-        if (view.getVisibility() == View.VISIBLE) {
-            return;
-        }
-
-        view.clearAnimation();
-        view.startAnimation(mViewShowAnimation);
-        view.setVisibility(View.VISIBLE);
-    }
-
     private void hideView(View view) {
         if (view.getVisibility() != View.VISIBLE) {
             return;
         }
-        view.clearAnimation();
-        view.startAnimation(mViewHideAnimation);
+//        view.clearAnimation();
+//        view.startAnimation(mViewHideAnimation);
         view.setVisibility(View.GONE);
     }
 
