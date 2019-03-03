@@ -1,8 +1,10 @@
 package cn.hzw.doodle;
 
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.view.MotionEvent;
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 import cn.forward.androids.ScaleGestureDetectorApi27;
 import cn.forward.androids.TouchGestureDetector;
+import cn.forward.androids.utils.LogUtil;
 import cn.hzw.doodle.core.IDoodle;
 import cn.hzw.doodle.core.IDoodleItem;
 import cn.hzw.doodle.core.IDoodlePen;
@@ -105,6 +108,8 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         mLastTouchY = mTouchY = event.getY();
         mDoodle.setScrollingDoodle(true);
 
+        mDoodle.removeAllExceptFirst();
+
         if (mDoodle.isEditMode() || isPenEditable(mDoodle.getPen())) {
             if (mSelectedItem != null) {
                 PointF xy = mSelectedItem.getLocation();
@@ -168,9 +173,23 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
             }
         } else {
             if (mCurrDoodlePath != null) {
+                mDoodle.setPen(DoodlePen.BRUSH);
+                mDoodle.setShape(DoodleShape.HOLLOW_RECT);
+                mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 255, 0)));
+                RectF rect = mCurrDoodlePath.mBound;
+                LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
+                LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
+                Path path = new Path();
+                rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
+                path.addRect(rect, Path.Direction.CW);
+                DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
+                mDoodle.addItem(doodlePath);
                 mCurrDoodlePath = null;
             }
         }
+        mDoodle.setPen(DoodlePen.ERASER);
+        mDoodle.setShape(DoodleShape.HAND_WRITE);
+        mDoodle.setColor(new DoodleColor(Color.argb(200, 0, 0, 0)));
         mDoodle.refresh();
     }
 
@@ -299,6 +318,8 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         // 屏幕上的焦点
         mTouchCentreX = detector.getFocusX();
         mTouchCentreY = detector.getFocusY();
+
+        mDoodle.removeAllExceptFirst();
 
         if (mLastFocusX != null && mLastFocusY != null) { // 焦点改变
             final float dx = mTouchCentreX - mLastFocusX;

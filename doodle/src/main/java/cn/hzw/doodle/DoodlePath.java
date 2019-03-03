@@ -39,7 +39,7 @@ public class DoodlePath extends DoodleRotatableItemBase {
     private CopyLocation mCopyLocation;
 
     private final Matrix mTransform = new Matrix();
-    private Rect mRect = new Rect();
+    public Rect mRect = new Rect();
     private Matrix mBitmapColorMatrix = new Matrix();
 
     public DoodlePath(IDoodle doodle) {
@@ -137,7 +137,7 @@ public class DoodlePath extends DoodleRotatableItemBase {
         canvas.drawPath(getPath(), mPaint);
     }
 
-    private RectF mBound = new RectF();
+    public RectF mBound = new RectF();
 
     private void resetLocationBounds(Rect rect) {
         if (mOriginPath == null) {
