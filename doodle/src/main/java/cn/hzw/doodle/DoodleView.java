@@ -39,7 +39,7 @@ public class DoodleView extends View implements IDoodle {
 
     public final static float MAX_SCALE = 5f; // 最大缩放倍数
     public final static float MIN_SCALE = 0.25f; // 最小缩放倍数
-    public final static int DEFAULT_SIZE = 6; // 默认画笔大小
+    public final static int DEFAULT_SIZE = 20; // Default brush size
 
     public static final int ERROR_INIT = -1;
     public static final int ERROR_SAVE = -2;
