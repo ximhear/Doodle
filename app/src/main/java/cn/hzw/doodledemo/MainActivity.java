@@ -15,7 +15,6 @@ import cn.forward.androids.utils.LogUtil;
 import cn.hzw.doodle.DoodleActivity;
 import cn.hzw.doodle.DoodleParams;
 import cn.hzw.doodle.DoodleView;
-import cn.hzw.doodledemo.guide.DoodleGuideActivity;
 import cn.hzw.imageselector.ImageLoader;
 import cn.hzw.imageselector.ImageSelectorActivity;
 
@@ -37,25 +36,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        findViewById(R.id.btn_guide).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), DoodleGuideActivity.class));
-            }
-        });
-
-        findViewById(R.id.btn_mosaic).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MosaicDemo.class));
-            }
-        });
-        findViewById(R.id.btn_scale_gesture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ScaleGestureItemDemo.class));
-            }
-        });
         mPath = (TextView) findViewById(R.id.img_path);
     }
 
