@@ -53,13 +53,7 @@ public class DoodlePath extends DoodleRotatableItemBase {
         mDxy.set(dx, dy);
         mOriginPath.reset();
 
-        if (DoodleShape.ARROW.equals(getShape())) {
-            updateArrowPath(mOriginPath, mSxy.x, mSxy.y, mDxy.x, mDxy.y, getSize());
-        } else if (DoodleShape.LINE.equals(getShape())) {
-            updateLinePath(mOriginPath, mSxy.x, mSxy.y, mDxy.x, mDxy.y, getSize());
-        } else if (DoodleShape.FILL_CIRCLE.equals(getShape()) || DoodleShape.HOLLOW_CIRCLE.equals(getShape())) {
-            updateCirclePath(mOriginPath, mSxy.x, mSxy.y, mDxy.x, mDxy.y, getSize());
-        } else if (DoodleShape.FILL_RECT.equals(getShape()) || DoodleShape.HOLLOW_RECT.equals(getShape())) {
+        if (DoodleShape.FILL_RECT.equals(getShape()) || DoodleShape.HOLLOW_RECT.equals(getShape())) {
             updateRectPath(mOriginPath, mSxy.x, mSxy.y, mDxy.x, mDxy.y, getSize());
         }
 
@@ -130,7 +124,7 @@ public class DoodlePath extends DoodleRotatableItemBase {
 
         int diff = (int) (getSize() / 2 + 0.5f);
         mOriginPath.computeBounds(mBound, false);
-        if (getShape() == DoodleShape.ARROW || getShape() == DoodleShape.FILL_CIRCLE || getShape() == DoodleShape.FILL_RECT) {
+        if (getShape() == DoodleShape.FILL_RECT) {
             diff = (int) getDoodle().getUnitSize();
         }
         rect.set((int) (mBound.left - diff), (int) (mBound.top - diff), (int) (mBound.right + diff), (int) (mBound.bottom + diff));
@@ -261,11 +255,6 @@ public class DoodlePath extends DoodleRotatableItemBase {
 
         if (mTransform == null) {
             return;
-        }
-
-        if (DoodleShape.ARROW.equals(getShape())) {
-            mOriginPath.reset();
-            updateArrowPath(mOriginPath, mSxy.x, mSxy.y, mDxy.x, mDxy.y, getSize());
         }
 
         adjustPath(false);

@@ -17,8 +17,6 @@ public enum DoodlePen implements IDoodlePen {
     BRUSH, // 画笔
     ERASER; // 橡皮擦
 
-    private CopyLocation mCopyLocation;
-
     @Override
     public void config(IDoodleItem item, Paint paint) {
         if (this == DoodlePen.ERASER) {
