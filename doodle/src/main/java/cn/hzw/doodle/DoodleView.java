@@ -661,25 +661,6 @@ public class DoodleView extends View implements IDoodle {
         refresh();
     }
 
-    @Override
-    public boolean undo(int step) {
-        if (mItemStack.size() > 0) {
-            step = Math.min(mItemStack.size(), step);
-            IDoodleItem item = mItemStack.get(mItemStack.size() - step);
-            removeItem(item);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 撤销
-     */
-    @Override
-    public boolean undo() {
-        return undo(1);
-    }
-
     /**
      * 只绘制原图
      *
@@ -899,28 +880,6 @@ public class DoodleView extends View implements IDoodle {
 
     public void setScrollingDoodle(boolean scrollingDoodle) {
         mIsScrollingDoodle = scrollingDoodle;
-        refresh();
-    }
-
-    @Override
-    public void topItem(IDoodleItem item) {
-        if (item == null) {
-            throw new RuntimeException("item is null");
-        }
-
-        mItemStack.remove(item);
-        mItemStack.add(item);
-        refresh();
-    }
-
-    @Override
-    public void bottomItem(IDoodleItem item) {
-        if (item == null) {
-            throw new RuntimeException("item is null");
-        }
-
-        mItemStack.remove(item);
-        mItemStack.add(0, item);
         refresh();
     }
 

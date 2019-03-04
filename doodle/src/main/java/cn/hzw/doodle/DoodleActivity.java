@@ -439,11 +439,6 @@ public class DoodleActivity extends Activity {
         }
 
         @Override
-        public boolean undo() {
-            return super.undo();
-        }
-
-        @Override
         public void clear() {
             super.clear();
         }

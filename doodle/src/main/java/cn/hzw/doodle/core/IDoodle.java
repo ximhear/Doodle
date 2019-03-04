@@ -232,35 +232,6 @@ public interface IDoodle {
     public void clear();
 
     /**
-     * 置顶item
-     *
-     * @param item
-     */
-    public void topItem(IDoodleItem item);
-
-    /**
-     * 置底item
-     *
-     * @param item
-     */
-    public void bottomItem(IDoodleItem item);
-
-    /**
-     * 撤销一步
-     *
-     * @return
-     */
-    public boolean undo();
-
-    /**
-     * 指定撤销的步数
-     *
-     * @param step
-     * @return
-     */
-    public boolean undo(int step);
-
-    /**
      * 获取当前显示的图片(无涂鸦)
      *
      * @return
