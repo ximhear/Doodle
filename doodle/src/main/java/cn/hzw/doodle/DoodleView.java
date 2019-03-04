@@ -864,15 +864,6 @@ public class DoodleView extends View implements IDoodle {
     }
 
     /**
-     * 设置是否开启放大镜
-     *
-     * @param enable
-     */
-    public void enableZoomer(boolean enable) {
-        mEnableZoomer = enable;
-    }
-
-    /**
      * 是否开启放大镜
      */
     public boolean isEnableZoomer() {

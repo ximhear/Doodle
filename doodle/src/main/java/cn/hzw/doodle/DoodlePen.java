@@ -15,17 +15,13 @@ import cn.hzw.doodle.core.IDoodlePen;
 public enum DoodlePen implements IDoodlePen {
 
     BRUSH, // 画笔
-    COPY, // 仿制
-    ERASER, // 橡皮擦
-    TEXT, // 文本
-    BITMAP, // 贴图
-    MOSAIC; // 马赛克
+    ERASER; // 橡皮擦
 
     private CopyLocation mCopyLocation;
 
     @Override
     public void config(IDoodleItem item, Paint paint) {
-        if (this == DoodlePen.COPY || this == DoodlePen.ERASER) {
+        if (this == DoodlePen.ERASER) {
             IDoodle doodle = item.getDoodle();
             if ((item.getColor() instanceof DoodleColor)
                     && ((DoodleColor) item.getColor()).getBitmap() == doodle.getBitmap()) {
@@ -36,20 +32,6 @@ public enum DoodlePen implements IDoodlePen {
         }
     }
 
-    public CopyLocation getCopyLocation() {
-        if (this != COPY) {
-            return null;
-        }
-        if (mCopyLocation == null) {
-            synchronized (this) {
-                if (mCopyLocation == null) {
-                    mCopyLocation = new CopyLocation();
-                }
-            }
-        }
-        return mCopyLocation;
-    }
-
     @Override
     public IDoodlePen copy() {
         return this;
@@ -57,10 +39,5 @@ public enum DoodlePen implements IDoodlePen {
 
     @Override
     public void drawHelpers(Canvas canvas, IDoodle doodle) {
-        if (this == COPY) {
-            if (doodle instanceof DoodleView && !((DoodleView) doodle).isEditMode()) {
-                mCopyLocation.drawItSelf(canvas, doodle.getSize());
-            }
-        }
     }
 }

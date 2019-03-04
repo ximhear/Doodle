@@ -44,7 +44,6 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
 
     private Path mCurrPath; // 当前手写的路径
     private DoodlePath mCurrDoodlePath;
-    private CopyLocation mCopyLocation;
 
     private DoodleView mDoodle;
 
@@ -61,9 +60,6 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
 
     public DoodleOnTouchGestureListener(DoodleView doodle, ISelectionListener listener) {
         mDoodle = doodle;
-        mCopyLocation = DoodlePen.COPY.getCopyLocation();
-        mCopyLocation.reset();
-        mCopyLocation.updateLocation(doodle.getBitmap().getWidth() / 2, doodle.getBitmap().getHeight() / 2);
         mSelectionListener = listener;
     }
 
@@ -128,30 +124,16 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
                 }
             }
         } else {
-            // 点击copy
-            if (mDoodle.getPen() == DoodlePen.COPY && mCopyLocation.contains(mDoodle.toX(mTouchX), mDoodle.toY(mTouchY), mDoodle.getSize())) {
-                mCopyLocation.setRelocating(true);
-                mCopyLocation.setCopying(false);
-            } else {
-                if (mDoodle.getPen() == DoodlePen.COPY) {
-                    mCopyLocation.setRelocating(false);
-                    if (!mCopyLocation.isCopying()) {
-                        mCopyLocation.setCopying(true);
-                        mCopyLocation.setStartPosition(mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
-                    }
-                }
-
-                // 初始化绘制
-                mCurrPath = new Path();
-                mCurrPath.moveTo(mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
-                if (mDoodle.getShape() == DoodleShape.HAND_WRITE) { // 手写
-                    mCurrDoodlePath = DoodlePath.toPath(mDoodle, mCurrPath);
-                } else {  // 画图形
-                    mCurrDoodlePath = DoodlePath.toShape(mDoodle,
-                            mDoodle.toX(mTouchDownX), mDoodle.toY(mTouchDownY), mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
-                }
-                mDoodle.addItem(mCurrDoodlePath);
+            // 初始化绘制
+            mCurrPath = new Path();
+            mCurrPath.moveTo(mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
+            if (mDoodle.getShape() == DoodleShape.HAND_WRITE) { // 手写
+                mCurrDoodlePath = DoodlePath.toPath(mDoodle, mCurrPath);
+            } else {  // 画图形
+                mCurrDoodlePath = DoodlePath.toShape(mDoodle,
+                        mDoodle.toX(mTouchDownX), mDoodle.toY(mTouchDownY), mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
             }
+            mDoodle.addItem(mCurrDoodlePath);
         }
         mDoodle.refresh();
     }
@@ -218,24 +200,15 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
                 }
             }
         } else {
-            if (mDoodle.getPen() == DoodlePen.COPY && mCopyLocation.isRelocating()) {
-                // 正在定位location
-                mCopyLocation.updateLocation(mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
-            } else {
-                if (mDoodle.getPen() == DoodlePen.COPY) {
-                    mCopyLocation.updateLocation(mCopyLocation.getCopyStartX() + mDoodle.toX(mTouchX) - mCopyLocation.getTouchStartX(),
-                            mCopyLocation.getCopyStartY() + mDoodle.toY(mTouchY) - mCopyLocation.getTouchStartY());
-                }
-                if (mDoodle.getShape() == DoodleShape.HAND_WRITE) { // 手写
-                    mCurrPath.quadTo(
-                            mDoodle.toX(mLastTouchX),
-                            mDoodle.toY(mLastTouchY),
-                            mDoodle.toX((mTouchX + mLastTouchX) / 2),
-                            mDoodle.toY((mTouchY + mLastTouchY) / 2));
-                    mCurrDoodlePath.updatePath(mCurrPath);
-                } else {  // 画图形
-                    mCurrDoodlePath.updateXY(mDoodle.toX(mTouchDownX), mDoodle.toY(mTouchDownY), mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
-                }
+            if (mDoodle.getShape() == DoodleShape.HAND_WRITE) { // 手写
+                mCurrPath.quadTo(
+                        mDoodle.toX(mLastTouchX),
+                        mDoodle.toY(mLastTouchY),
+                        mDoodle.toX((mTouchX + mLastTouchX) / 2),
+                        mDoodle.toY((mTouchY + mLastTouchY) / 2));
+                mCurrDoodlePath.updatePath(mCurrPath);
+            } else {  // 画图形
+                mCurrDoodlePath.updateXY(mDoodle.toX(mTouchDownX), mDoodle.toY(mTouchDownY), mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
             }
         }
         mDoodle.refresh();
@@ -244,8 +217,7 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
 
     // 判断当前画笔是否可编辑
     private boolean isPenEditable(IDoodlePen pen) {
-        return (mDoodle.getPen() == DoodlePen.TEXT && pen == DoodlePen.TEXT)
-                || (mDoodle.getPen() == DoodlePen.BITMAP && pen == DoodlePen.BITMAP);
+        return false;
     }
 
     @Override
