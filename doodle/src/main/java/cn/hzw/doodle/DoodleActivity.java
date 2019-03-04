@@ -300,62 +300,7 @@ public class DoodleActivity extends Activity {
         }
         }, null);
 
-        mTouchGestureListener = new DoodleOnTouchGestureListener(mDoodleView, new DoodleOnTouchGestureListener.ISelectionListener() {
-            // save states before being selected
-            IDoodlePen mLastPen = null;
-            IDoodleColor mLastColor = null;
-            Float mSize = null;
-
-            IDoodleItemListener mIDoodleItemListener = new IDoodleItemListener() {
-                @Override
-                public void onPropertyChanged(int property) {
-                    if (mTouchGestureListener.getSelectedItem() == null) {
-                        return;
-                    }
-                }
-            };
-
-            @Override
-            public void onSelectedItem(IDoodle doodle, IDoodleSelectableItem selectableItem, boolean selected) {
-                if (selected) {
-                    if (mLastPen == null) {
-                        mLastPen = mDoodle.getPen();
-                    }
-                    if (mLastColor == null) {
-                        mLastColor = mDoodle.getColor();
-                    }
-                    if (mSize == null) {
-                        mSize = mDoodle.getSize();
-                    }
-                    mDoodleView.setEditMode(true);
-                    mDoodle.setPen(selectableItem.getPen());
-                    mDoodle.setColor(selectableItem.getColor());
-                    mDoodle.setSize(selectableItem.getSize());
-                    selectableItem.addItemListener(mIDoodleItemListener);
-                } else {
-                    selectableItem.removeItemListener(mIDoodleItemListener);
-
-                    if (mTouchGestureListener.getSelectedItem() == null) { // nothing is selected. 当前没有选中任何一个item
-                        if (mLastPen != null) {
-                            mDoodle.setPen(mLastPen);
-                            mLastPen = null;
-                        }
-                        if (mLastColor != null) {
-                            mDoodle.setColor(mLastColor);
-                            mLastColor = null;
-                        }
-                        if (mSize != null) {
-                            mDoodle.setSize(mSize);
-                            mSize = null;
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCreateSelectableItem(IDoodle doodle, float x, float y) {
-            }
-        }) {
+        mTouchGestureListener = new DoodleOnTouchGestureListener(mDoodleView) {
             @Override
             public void setSupportScaleItem(boolean supportScaleItem) {
                 super.setSupportScaleItem(supportScaleItem);

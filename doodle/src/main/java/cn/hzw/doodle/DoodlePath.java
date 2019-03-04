@@ -22,7 +22,7 @@ import cn.hzw.doodle.util.DrawUtil;
  * Created by huangziwei on 2017/3/16.
  */
 
-public class DoodlePath extends DoodleRotatableItemBase {
+public class DoodlePath extends DoodleItemBase {
 
     public static final int MOSAIC_LEVEL_1 = 5;
     public static final int MOSAIC_LEVEL_2 = 20;
@@ -41,11 +41,11 @@ public class DoodlePath extends DoodleRotatableItemBase {
     private Matrix mBitmapColorMatrix = new Matrix();
 
     public DoodlePath(IDoodle doodle) {
-        super(doodle, 0, 0, 0);// 这里默认item旋转角度为0
+        super(doodle, null);
     }
 
     public DoodlePath(IDoodle doodle, DoodlePaintAttrs attrs) {
-        super(doodle, attrs, 0, 0, 0);
+        super(doodle, attrs);
     }
 
     public void updateXY(float sx, float sy, float dx, float dy) {
@@ -128,12 +128,6 @@ public class DoodlePath extends DoodleRotatableItemBase {
             diff = (int) getDoodle().getUnitSize();
         }
         rect.set((int) (mBound.left - diff), (int) (mBound.top - diff), (int) (mBound.right + diff), (int) (mBound.bottom + diff));
-    }
-
-    @Override
-    protected void resetBounds(Rect rect) {
-        resetLocationBounds(rect);
-        rect.set(0, 0, rect.width(), rect.height());
     }
 
     @Override
