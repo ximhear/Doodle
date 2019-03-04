@@ -24,10 +24,6 @@ import cn.hzw.doodle.util.DrawUtil;
 
 public class DoodlePath extends DoodleItemBase {
 
-    public static final int MOSAIC_LEVEL_1 = 5;
-    public static final int MOSAIC_LEVEL_2 = 20;
-    public static final int MOSAIC_LEVEL_3 = 50;
-
     private final Path mPath = new Path(); // 画笔的路径
     private final Path mOriginPath = new Path();
 

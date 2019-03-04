@@ -103,10 +103,11 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         if (mCurrDoodlePath != null) {
             mDoodle.setPen(DoodlePen.BRUSH);
             mDoodle.setShape(DoodleShape.HOLLOW_RECT);
+            mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
             mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 255, 0)));
             RectF rect = mCurrDoodlePath.mBound;
-            LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
-            LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
+//            LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
+//            LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
             Path path = new Path();
             rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
             path.addRect(rect, Path.Direction.CW);
@@ -116,6 +117,7 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         }
         mDoodle.setPen(DoodlePen.ERASER);
         mDoodle.setShape(DoodleShape.HAND_WRITE);
+        mDoodle.setSize(DoodleView.DEFAULT_SIZE * mDoodle.getUnitSize());
         mDoodle.setColor(new DoodleColor(Color.argb(200, 0, 0, 0)));
         mDoodle.refresh();
     }
