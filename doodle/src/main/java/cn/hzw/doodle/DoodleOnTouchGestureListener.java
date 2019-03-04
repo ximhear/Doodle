@@ -106,10 +106,11 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
             mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
             mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 255, 0)));
             RectF rect = mCurrDoodlePath.mBound;
+
 //            LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
 //            LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
             Path path = new Path();
-            rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
+            rect.inset(-mDoodle.getSize(), -mDoodle.getSize());
             path.addRect(rect, Path.Direction.CW);
             DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
             mDoodle.addItem(doodlePath);
