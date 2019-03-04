@@ -32,13 +32,6 @@ public class DoodleParams implements Parcelable {
     public boolean mIsDrawableOutside;
 
     /**
-     * 涂鸦时（手指按下）隐藏设置面板的延长时间(ms)，当小于等于0时则为不尝试隐藏面板（即保持面板当前状态不变）;当大于0时表示需要触摸屏幕超过一定时间后才隐藏
-     * 或者手指抬起时展示面板的延长时间(ms)，或者表示需要离开屏幕超过一定时间后才展示
-     * 默认为200ms
-     */
-    public long mChangePanelVisibilityDelay = 200; //ms
-
-    /**
      * 设置放大镜的倍数，当小于等于0时表示不使用放大器功能
      * 放大器只有在设置面板被隐藏的时候才会出现
      * 默认为2.5倍
@@ -86,7 +79,6 @@ public class DoodleParams implements Parcelable {
             params.mSavePath = in.readString();
             params.mSavePathIsDir = in.readInt() == 1;
             params.mIsDrawableOutside = in.readInt() == 1;
-            params.mChangePanelVisibilityDelay = in.readLong();
             params.mZoomerScale = in.readFloat();
             params.mIsFullScreen = in.readInt() == 1;
             params.mPaintPixelSize = in.readFloat();
@@ -111,7 +103,6 @@ public class DoodleParams implements Parcelable {
         dest.writeString(mSavePath);
         dest.writeInt(mSavePathIsDir ? 1 : 0);
         dest.writeInt(mIsDrawableOutside ? 1 : 0);
-        dest.writeLong(mChangePanelVisibilityDelay);
         dest.writeFloat(mZoomerScale);
         dest.writeInt(mIsFullScreen ? 1 : 0);
         dest.writeFloat(mPaintPixelSize);
