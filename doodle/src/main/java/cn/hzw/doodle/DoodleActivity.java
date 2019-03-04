@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
@@ -21,15 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +38,6 @@ import cn.hzw.doodle.core.IDoodlePen;
 import cn.hzw.doodle.core.IDoodleSelectableItem;
 import cn.hzw.doodle.core.IDoodleShape;
 import cn.hzw.doodle.core.IDoodleTouchDetector;
-import cn.hzw.doodle.dialog.DialogController;
-import cn.hzw.doodle.imagepicker.ImageSelectorView;
 
 /**
  * 涂鸦界面，根据DoodleView的接口，提供页面交互
@@ -424,29 +414,12 @@ public class DoodleActivity extends Activity {
     private ValueAnimator mRotateAnimator;
 
     public void onClick(final View v) {
-    if (v.getId() == R.id.doodle_btn_hide_panel) {
+        if (v.getId() == R.id.doodle_btn_hide_panel) {
             v.setSelected(!v.isSelected());
         } else if (v.getId() == R.id.doodle_btn_finish) {
             mDoodle.save();
         } else if (v.getId() == R.id.doodle_btn_back) {
-            if (mDoodle.getAllItem() == null || mDoodle.getAllItem().size() == 0) {
-                finish();
-                return;
-            }
-            if (!(DoodleParams.getDialogInterceptor() != null
-                    && DoodleParams.getDialogInterceptor().onShow(DoodleActivity.this, mDoodle, DoodleParams.DialogType.SAVE))) {
-                DialogController.showEnterCancelDialog(DoodleActivity.this, getString(R.string.doodle_saving_picture), null, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDoodle.save();
-                    }
-                }, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-            }
+            finish();
         } else if (v.getId() == R.id.doodle_btn_rotate) {
             // 旋转图片
             if (mRotateAnimator == null) {
