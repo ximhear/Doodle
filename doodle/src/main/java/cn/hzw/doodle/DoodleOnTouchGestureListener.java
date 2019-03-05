@@ -110,7 +110,6 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
             rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
             mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
             rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
-//            rect.intersect(doodleRect);
 
             float left = Math.max(rect.left, imageBound.left);
             float right = Math.min(rect.right, imageBound.right);
@@ -138,8 +137,8 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
             rect.top = top;
             rect.bottom = bottom;
 
-            LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
-            LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
+//            LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
+//            LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
             Path path = new Path();
             path.addRect(rect, Path.Direction.CW);
             DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
