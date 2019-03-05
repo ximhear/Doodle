@@ -204,29 +204,6 @@ public class DoodlePath extends DoodleItemBase {
         }
     }
 
-    private static WeakHashMap<IDoodle, HashMap<Integer, Bitmap>> sMosaicBitmapMap = new WeakHashMap<>();
-
-    public static DoodleColor getMosaicColor(IDoodle doodle, int level) {
-        HashMap<Integer, Bitmap> map = sMosaicBitmapMap.get(doodle);
-        if (map == null) {
-            map = new HashMap<>();
-            sMosaicBitmapMap.put(doodle, map);
-        }
-        Matrix matrix = new Matrix();
-        matrix.setScale(1f / level, 1f / level);
-        Bitmap mosaicBitmap = map.get(level);
-        if (mosaicBitmap == null) {
-            mosaicBitmap = Bitmap.createBitmap(doodle.getBitmap(),
-                    0, 0, doodle.getBitmap().getWidth(), doodle.getBitmap().getHeight(), matrix, true);
-            map.put(level, mosaicBitmap);
-        }
-        matrix.reset();
-        matrix.setScale(level, level);
-        DoodleColor doodleColor = new DoodleColor(mosaicBitmap, matrix, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        doodleColor.setLevel(level);
-        return doodleColor;
-    }
-
     @Override
     public void setLocation(float x, float y, boolean changePivot) {
         super.setLocation(x, y, changePivot);

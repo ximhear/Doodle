@@ -293,6 +293,15 @@ public class DoodleView extends View implements IDoodle {
         return mDoodleBound;
     }
 
+    public RectF getImageBound() {
+        float width = mBitmap.getWidth();
+        float height = mBitmap.getHeight();
+        RectF bound = new RectF();
+        bound.set(0, 0, width, height);
+
+        return bound;
+    }
+
     @Override
     protected void dispatchDraw(Canvas canvas) {
         if (mBitmap.isRecycled()) {
