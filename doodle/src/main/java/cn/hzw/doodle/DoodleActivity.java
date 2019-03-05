@@ -186,7 +186,7 @@ public class DoodleActivity extends Activity {
 
                 DoodlePath item = (DoodlePath)items.get(1);
                 RectF rect = item.mBound;
-                rect.inset(mDoodle.getSize() / 4, mDoodle.getSize() / 4);
+                rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
                 int bitmapWidth = mDoodle.getBitmap().getWidth();
                 int bitmapHeight = mDoodle.getBitmap().getHeight();
                 float norX = rect.left / bitmapWidth;
