@@ -963,6 +963,22 @@ public class DoodleView extends View implements IDoodle {
         refresh();
     }
 
+    public void removeAllExceptFirstTwo() {
+
+        if (mItemStack.size() == 2) {
+            return;
+        }
+
+        int length = mItemStack.size();
+        for (int index = length - 1; index >= 2; index--) {
+
+            IDoodleItem item = mItemStack.get(index);
+            mItemStack.remove(index);
+            item.onRemove();
+        }
+    }
+
+
     @Override
     public List<IDoodleItem> getAllItem() {
         return mItemStack;

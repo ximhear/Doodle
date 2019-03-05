@@ -101,55 +101,61 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         mDoodle.setScrollingDoodle(false);
 
         if (mCurrDoodlePath != null) {
-            mDoodle.setPen(DoodlePen.BRUSH);
-            mDoodle.setShape(DoodleShape.HOLLOW_RECT);
-            mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 255, 0)));
-            RectF imageBound = mDoodle.getImageBound();
-            RectF rect = new RectF(mCurrDoodlePath.mBound);
-            mDoodle.setSize(DoodleView.DEFAULT_SIZE * mDoodle.getUnitSize());
-            rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
-            mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
-            rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
-
-            float left = Math.max(rect.left, imageBound.left);
-            float right = Math.min(rect.right, imageBound.right);
-            float top = Math.max(rect.top, imageBound.top);
-            float bottom = Math.min(rect.bottom, imageBound.bottom);
-
-            if (left < 0) {
-                left = 0;
-            }
-
-            if (top < 0) {
-                top = 0;
-            }
-
-            if (right > imageBound.right) {
-                right = imageBound.right;
-            }
-
-            if (bottom > imageBound.bottom) {
-                bottom = imageBound.bottom;
-            }
-
-            rect.left = left;
-            rect.right = right;
-            rect.top = top;
-            rect.bottom = bottom;
-
-//            LogUtil.d("Rect", rect.left + ", " + rect.top + "," + rect.width() + "," + rect.height());
-//            LogUtil.d("Rect", mDoodle.toX(rect.left) + ", " + mDoodle.toY(rect.top) + "," + mDoodle.toX(rect.width()) + "," + mDoodle.toY(rect.height()));
-            Path path = new Path();
-            path.addRect(rect, Path.Direction.CW);
-            DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
-            mDoodle.addItem(doodlePath);
+           drawBoundingRect();
             mCurrDoodlePath = null;
         }
+        mDoodle.refresh();
+    }
+
+    private void drawBoundingRect() {
+
+        mDoodle.removeAllExceptFirstTwo();
+
+        mDoodle.setPen(DoodlePen.BRUSH);
+        mDoodle.setShape(DoodleShape.HOLLOW_RECT);
+        mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 255, 0)));
+        RectF imageBound = mDoodle.getImageBound();
+        RectF rect = new RectF(mCurrDoodlePath.mBound);
+        mDoodle.setSize(DoodleView.DEFAULT_SIZE * mDoodle.getUnitSize());
+        rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
+        mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
+        rect.inset(-mDoodle.getSize() / 2, -mDoodle.getSize() / 2);
+
+        float left = Math.max(rect.left, imageBound.left);
+        float right = Math.min(rect.right, imageBound.right);
+        float top = Math.max(rect.top, imageBound.top);
+        float bottom = Math.min(rect.bottom, imageBound.bottom);
+
+        if (left < 0) {
+            left = 0;
+        }
+
+        if (top < 0) {
+            top = 0;
+        }
+
+        if (right > imageBound.right) {
+            right = imageBound.right;
+        }
+
+        if (bottom > imageBound.bottom) {
+            bottom = imageBound.bottom;
+        }
+
+        rect.left = left;
+        rect.right = right;
+        rect.top = top;
+        rect.bottom = bottom;
+
+        Path path = new Path();
+        path.addRect(rect, Path.Direction.CW);
+        DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
+        mDoodle.addItem(doodlePath);
+
         mDoodle.setPen(DoodlePen.ERASER);
         mDoodle.setShape(DoodleShape.HAND_WRITE);
         mDoodle.setSize(DoodleView.DEFAULT_SIZE * mDoodle.getUnitSize());
         mDoodle.setColor(new DoodleColor(Color.argb(200, 0, 0, 0)));
-        mDoodle.refresh();
     }
 
     @Override
@@ -167,10 +173,16 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
                     mDoodle.toX((mTouchX + mLastTouchX) / 2),
                     mDoodle.toY((mTouchY + mLastTouchY) / 2));
             mCurrDoodlePath.updatePath(mCurrPath);
+
+
+            drawBoundingRect();
+
+            mDoodle.refresh();
+
         } else {  // 画图形
             mCurrDoodlePath.updateXY(mDoodle.toX(mTouchDownX), mDoodle.toY(mTouchDownY), mDoodle.toX(mTouchX), mDoodle.toY(mTouchY));
         }
-        mDoodle.refresh();
+
         return true;
     }
 
