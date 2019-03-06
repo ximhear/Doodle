@@ -155,7 +155,7 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         if (fillRect == true) {
             mDoodle.setPen(DoodlePen.ERASER);
             mDoodle.setShape(DoodleShape.FILL_RECT);
-            mDoodle.setColor(new DoodleColor(Color.argb(200, 0, 0, 0)));
+            mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 0, 0)));
             RectF r = new RectF(rect);
             mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
             r.inset(mDoodle.getSize() / 2, mDoodle.getSize() / 2);
@@ -166,7 +166,7 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         mDoodle.setPen(DoodlePen.ERASER);
         mDoodle.setShape(DoodleShape.HAND_WRITE);
         mDoodle.setSize(DoodleView.DEFAULT_SIZE * mDoodle.getUnitSize());
-        mDoodle.setColor(new DoodleColor(Color.argb(200, 0, 0, 0)));
+        mDoodle.setColor(new DoodleColor(Color.argb(128, 0, 0, 0)));
     }
 
     @Override
