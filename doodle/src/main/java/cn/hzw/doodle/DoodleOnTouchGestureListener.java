@@ -101,13 +101,13 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         mDoodle.setScrollingDoodle(false);
 
         if (mCurrDoodlePath != null) {
-           drawBoundingRect();
+           drawBoundingRect(true);
             mCurrDoodlePath = null;
         }
         mDoodle.refresh();
     }
 
-    private void drawBoundingRect() {
+    private void drawBoundingRect(Boolean fillRect) {
 
         mDoodle.removeAllExceptFirstTwo();
 
@@ -152,6 +152,17 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
         DoodlePath doodlePath = DoodlePath.toPath(mDoodle, path);
         mDoodle.addItem(doodlePath);
 
+        if (fillRect == true) {
+            mDoodle.setPen(DoodlePen.ERASER);
+            mDoodle.setShape(DoodleShape.FILL_RECT);
+            mDoodle.setColor(new DoodleColor(Color.argb(200, 0, 0, 0)));
+            RectF r = new RectF(rect);
+            mDoodle.setSize(DoodleView.DEFAULT_SIZE / 2 * mDoodle.getUnitSize());
+            r.inset(mDoodle.getSize() / 2, mDoodle.getSize() / 2);
+            doodlePath = DoodlePath.toShape(mDoodle, r.left, r.top, r.right, r.bottom);
+            mDoodle.addItem(doodlePath);
+        }
+
         mDoodle.setPen(DoodlePen.ERASER);
         mDoodle.setShape(DoodleShape.HAND_WRITE);
         mDoodle.setSize(DoodleView.DEFAULT_SIZE * mDoodle.getUnitSize());
@@ -175,7 +186,7 @@ public class DoodleOnTouchGestureListener extends TouchGestureDetector.OnTouchGe
             mCurrDoodlePath.updatePath(mCurrPath);
 
 
-            drawBoundingRect();
+            drawBoundingRect(false);
 
             mDoodle.refresh();
 
